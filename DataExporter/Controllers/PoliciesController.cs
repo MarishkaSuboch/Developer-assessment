@@ -8,30 +8,40 @@ namespace DataExporter.Controllers
     [Route("[controller]")]
     public class PoliciesController : ControllerBase
     {
-        private PolicyService _policyService;
+        private readonly IPolicyService _policyService;
 
-        public PoliciesController(PolicyService policyService) 
-        { 
+        public PoliciesController(IPolicyService policyService) 
+        {
             _policyService = policyService;
         }
 
         [HttpPost]
         public async Task<IActionResult> PostPolicies([FromBody]CreatePolicyDto createPolicyDto)
-        {         
-            return Ok();
+        {
+            var result = await _policyService.CreatePolicyAsync(createPolicyDto);
+
+            if (result is null)
+                return NotFound("NotAdded");
+
+            return Ok(result);
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetPolicies()
         {
-            return Ok();
+            return Ok(await _policyService.ReadPoliciesAsync());
         }
 
         [HttpGet("{policyId}")]
-        public async Task<IActionResult> GetPolicy(int id)
+        public async Task<IActionResult> GetPolicy(int policyId)
         {
-            return Ok(_policyService.ReadPolicyAsync(id));
+            var result = await _policyService.ReadPolicyAsync(policyId);
+
+            if(result is null)
+                return NotFound("NotFound");
+
+            return Ok(result);
         }
 
 
