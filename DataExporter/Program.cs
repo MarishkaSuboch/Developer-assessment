@@ -1,3 +1,4 @@
+using DataExporter.Mapping;
 using DataExporter.Services;
 
 namespace DataExporter
@@ -12,8 +13,8 @@ namespace DataExporter
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<ExporterDbContext>();
-            builder.Services.AddScoped<PolicyService>();
-
+            builder.Services.AddScoped<IPolicyService, PolicyService>();
+            builder.Services.AddAutoMapper(typeof(Mapper));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

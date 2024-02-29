@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "b5c447e0-c336-49f9-b45c-a82d32b5e285",
+		"name": "DevAssesmentPostman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6098685"
+	},
+	"item": [
+		{
+			"name": "GetPolicies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is ok', function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('response have body', function(){\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test('response count', function(){\r",
+							"    var body = pm.response.json();\r",
+							"    pm.expect(body.length).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7246/policies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPolicy-Ok",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is ok', function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('response have body', function(){\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test('response value id 2', function(){\r",
+							"    var body = pm.response.json();\r",
+							"    pm.expect(body.id).to.eql(2);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7246/policies/2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPolicy-NotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is NotFound', function(){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7246/policies/6",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostPolicies-Ok",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is ok', function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"pm.test('response have body', function(){\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test('response added id is 6', function(){\r",
+							"    var body = pm.response.json();\r",
+							"    pm.expect(body.id).to.eql(6);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"policyNumber\": \"HSCX1099\",\r\n        \"premium\": 200,\r\n        \"startDate\": \"2024-04-01T00:00:00\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7246/policies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostPolicies-BadRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is bad request', function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"policyNumber\": \"HSCX1099\",\r\n        \"premium\": 200,\r\n        \"startDate\": \"xyz\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7246/policies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostPolicies-Validation_BadRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is bad request', function(){\r",
+							"    pm.response.to.have.status(400);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"premium\": 200,\r\n        \"startDate\": \"2024-04-01T00:00:00\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7246/policies",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export-Ok",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7246/policies/export?startDate=2024-04-01&endDate=2024-04-05",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies",
+						"export"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2024-04-01"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-04-05"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Export-NotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('response is NotFound', function(){\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7246/policies/export?startDate=2024-05-05&endDate=2024-05-03",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7246",
+					"path": [
+						"policies",
+						"export"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2024-05-05"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-05-03"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
