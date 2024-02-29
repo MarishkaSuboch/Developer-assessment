@@ -8,7 +8,7 @@ namespace DataExporter.Services
 {
     public class PolicyService: IPolicyService
     {
-        private ExporterDbContext _dbContext;
+        private readonly ExporterDbContext _dbContext;
         private readonly IMapper _mapper;
         public PolicyService(ExporterDbContext dbContext, IMapper mapper)
         {
@@ -21,7 +21,7 @@ namespace DataExporter.Services
         /// Creates a new policy from the DTO.
         /// </summary>
         /// <param name="createPolicyDto"></param>
-        /// <returns>Returns a ReadPolicyDto representing the new policy, if succeded. Returns null, otherwise.</returns>
+        /// <returns>Returns a ReadPolicyDto representing the new policy, if succeeded. Returns null, otherwise.</returns>
         public async Task<ReadPolicyDto?> CreatePolicyAsync(CreatePolicyDto createPolicyDto)
         {
             var result = await _dbContext.Policies.AddAsync(_mapper.Map<Policy>(createPolicyDto));
@@ -30,9 +30,8 @@ namespace DataExporter.Services
         }
 
         /// <summary>
-        /// Retrives all policies.
+        /// Retrieves all policies.
         /// </summary>
-        /// <param name="id"></param>
         /// <returns>Returns a list of ReadPoliciesDto.</returns>
         public async Task<IList<ReadPolicyDto>> ReadPoliciesAsync()
         {
@@ -53,14 +52,18 @@ namespace DataExporter.Services
         }
 
         /// <summary>
-        /// 
+        /// Export data with notes
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
         public async Task<IList<ExportDto>> ExportData(DateTime startDate, DateTime endDate)
         {
-            var result = await _dbContext.Policies.Where(p => p.StartDate >= startDate && p.StartDate <= endDate).Include(p => p.Notes).Select(p => _mapper.Map<ExportDto>(p)).ToListAsync();
+            var result = await _dbContext.Policies
+                .Where(p => p.StartDate >= startDate && p.StartDate <= endDate)
+                .Include(p => p.Notes)
+                .Select(p => _mapper.Map<ExportDto>(p))
+                .ToListAsync();
             return result;
         }
     }

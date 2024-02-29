@@ -1,5 +1,4 @@
 ﻿using DataExporter.Dtos;
-using DataExporter.Model;
 using DataExporter.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +18,16 @@ namespace DataExporter.Controllers
         [HttpPost]
         public async Task<IActionResult> PostPolicies([FromBody]CreatePolicyDto createPolicyDto)
         {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
             var result = await _policyService.CreatePolicyAsync(createPolicyDto);
 
             if (result is null)
-                return NotFound("NotAdded");
+                return BadRequest();
 
-            return Ok(result);
+            return new ObjectResult(result) { StatusCode = StatusCodes.Status201Created };
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetPolicies()
@@ -34,23 +35,26 @@ namespace DataExporter.Controllers
             return Ok(await _policyService.ReadPoliciesAsync());
         }
 
-        [HttpGet("{policyId}")]
+        [HttpGet("{policyId:int}")]
         public async Task<IActionResult> GetPolicy(int policyId)
         {
             var result = await _policyService.ReadPolicyAsync(policyId);
 
             if(result is null)
-                return NotFound("NotFound");
+                return NotFound("Not Found");
 
             return Ok(result);
         }
-
 
         [HttpGet("export")]
         public async Task<IActionResult> ExportData([FromQuery]DateTime startDate, [FromQuery] DateTime endDate)
         {
             var result = await _policyService.ExportData(startDate, endDate);
-            return Ok(result);
+
+            if (result.Any())
+                return Ok(result);
+
+            return NotFound("Not Found");
         }
     }
 }

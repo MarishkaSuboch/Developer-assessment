@@ -10,7 +10,6 @@ namespace DataExporter.Mapping
         {
             CreateMap<Policy, ReadPolicyDto>().ReverseMap();
             CreateMap<Policy, CreatePolicyDto>().ReverseMap();
-            //CreateMap<Note, ExportDto>().ForMember(dto => dto.Notes, opt => opt.MapFrom(x => x.Text));
             CreateMap<Policy, ExportDto>().ForMember(
                 dto => dto.Notes,
                 opt => opt.MapFrom(x => x.Notes.Select(x => x.Text)));
