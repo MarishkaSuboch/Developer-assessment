@@ -1,4 +1,5 @@
 ﻿using DataExporter.Dtos;
+using DataExporter.Model;
 using DataExporter.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,10 +46,11 @@ namespace DataExporter.Controllers
         }
 
 
-        [HttpPost("export")]
+        [HttpGet("export")]
         public async Task<IActionResult> ExportData([FromQuery]DateTime startDate, [FromQuery] DateTime endDate)
         {
-            return Ok();
+            var result = await _policyService.ExportData(startDate, endDate);
+            return Ok(result);
         }
     }
 }

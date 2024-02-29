@@ -7,5 +7,6 @@ namespace DataExporter.Services
         Task<ReadPolicyDto?> CreatePolicyAsync(CreatePolicyDto createPolicyDto);
         Task<IList<ReadPolicyDto>> ReadPoliciesAsync();
         Task<ReadPolicyDto?> ReadPolicyAsync(int id);
+        Task<IList<ExportDto>> ExportData(DateTime startDate, DateTime endDate);
     }
 }

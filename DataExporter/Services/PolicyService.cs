@@ -51,5 +51,17 @@ namespace DataExporter.Services
 
             return _mapper.Map<ReadPolicyDto>(policy);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public async Task<IList<ExportDto>> ExportData(DateTime startDate, DateTime endDate)
+        {
+            var result = await _dbContext.Policies.Where(p => p.StartDate >= startDate && p.StartDate <= endDate).Include(p => p.Notes).Select(p => _mapper.Map<ExportDto>(p)).ToListAsync();
+            return result;
+        }
     }
 }
